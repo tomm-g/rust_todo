@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, env::home_dir};
 use colored::*;
 use serde::{Serialize, Deserialize};
 
@@ -48,7 +48,7 @@ impl Todo {
             .write(true)
             .create(true)
             .read(true)
-            .open("db.json")?;
+            .open(home_dir().unwrap().join(".db.json"))?;
         
         match serde_json::from_reader(f) {
             Ok(map) => Ok(Todo { map }),
@@ -67,7 +67,7 @@ impl Todo {
         let f = std::fs::OpenOptions::new()
             .write(true)
             .create(true)
-            .open("db.json")?;
+            .open(home_dir().unwrap().join(".db.json"))?;
         serde_json::to_writer_pretty(f, &self.map)?;
         Ok(())
     }
